@@ -75,6 +75,7 @@ This finding aligns with Boyd et al. (2019)'s choice of a fully connected ANN ov
 ## Visualizations
 
 ![ANN vs LSTM Comparison](ann_vs_lstm_comparison.png)
+(Remote Sensing Style Analysis.png)
 
 *Six panel comparison showing: training loss curves, predicted vs actual scatter plots, RMSE bar chart, and time series overlay for both models.*
 
