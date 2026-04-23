@@ -78,6 +78,7 @@ This finding aligns with Boyd et al. (2019)'s choice of a fully connected ANN ov
 ![Remote Sensing Style Analysis](remote_sensing_analysis.png)
 ![Temporal Soil Moisture Snapshots](temporal_snapshots.png)
 ![Inter-Sensor Correlation Analysis](sensor_correlation_analysis.png)
+![Uncertainty Quantification](uncertainity_over_time.png)
 
 *Six panel comparison showing: training loss curves, predicted vs actual scatter plots, RMSE bar chart, and time series overlay for both models.*
 
