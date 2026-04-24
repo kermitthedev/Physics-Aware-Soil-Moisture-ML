@@ -191,6 +191,41 @@ and model interpretation.
 
 ---
 
+## Temporal Necessity Test
+
+A key question raised by the ANN vs LSTM comparison is: 
+*why* does the ANN outperform LSTM? Is temporal order 
+genuinely unnecessary for this problem, or did LSTM simply 
+underperform?
+
+This study formally tests temporal necessity through two 
+controlled ablations:
+
+**Test 1 — Temporal Shuffling**
+All rows are randomly shuffled, destroying temporal order 
+while preserving cross-sensor (spatial) relationships. 
+If ANN performance is unchanged → temporal order was never 
+necessary → spatial depth relationships drive predictions.
+
+**Test 2 — Spatial Ablation**  
+Temporal features (hour, minute) are removed entirely. 
+Only the four moisture depth sensors remain as features.
+If performance is maintained → physics lives in sensor 
+depth relationships, not time-of-day patterns.
+
+**Hypothesis:** In high-frequency sensing (minute-level), 
+spatial relationships between sensor depths carry more 
+predictive signal than temporal dynamics — explaining 
+ANN's dominance over LSTM.
+
+| Condition | Features | Temporal Order | Expected Result |
+|-----------|----------|----------------|-----------------|
+| Original ANN | All 6 | Preserved | RMSE 0.0038 |
+| Shuffled ANN | All 6 | Destroyed | Similar RMSE |
+| Spatial-only ANN | 4 sensors only | Preserved | Slightly higher RMSE |
+
+---
+
 
 
 
