@@ -14,7 +14,42 @@ The methodology is directly inspired by Boyd et al. (2019), which demonstrated t
 
 ## Research Question
 
-> Does temporal memory (LSTM) improve soil moisture prediction over a static feedforward network (ANN) when using multi-depth sensor observations?
+> 
+This study investigates three interconnected questions 
+about temporal modeling in high-frequency environmental 
+sensing systems:
+
+**Primary Question**
+Does temporal memory (LSTM) improve soil moisture 
+prediction over a static feedforward network (ANN) 
+when using multi-depth sensor observations at 
+minute-level resolution?
+
+**Secondary Question**
+Is temporal order statistically necessary for accurate 
+soil moisture prediction, or do spatial relationships 
+between sensor depth layers contain sufficient 
+predictive information — and what does this reveal 
+about the underlying physics?
+
+**Tertiary Question**
+At what temporal resolution and sequence length does 
+LSTM gain competitive advantage over ANN — and can 
+a model learn to implicitly encode diurnal physical 
+forcing without explicit temporal features?
+
+---
+
+These questions are directly motivated by Boyd et al. 
+(2019), which demonstrated that physics-aware ANN 
+effectively retrieves soil moisture from NASA CYGNSS 
+satellite GPS reflectometry signals using simultaneous 
+multi-channel observations. This study formally tests 
+the statistical and physical assumptions underlying 
+that architectural choice — providing empirical 
+evidence for when feedforward networks are sufficient 
+versus when sequential models add value in 
+environmental sensing applications.
 
 ---
 
