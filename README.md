@@ -193,37 +193,75 @@ and model interpretation.
 
 ## Temporal Necessity Test
 
-A key question raised by the ANN vs LSTM comparison is: 
-*why* does the ANN outperform LSTM? Is temporal order 
-genuinely unnecessary for this problem, or did LSTM simply 
-underperform?
+A key question raised by the ANN vs LSTM comparison: 
+*why* does ANN outperform LSTM? Is temporal order 
+genuinely unnecessary, or did LSTM simply underperform?
 
-This study formally tests temporal necessity through two 
-controlled ablations:
+This study formally tests temporal necessity through 
+four controlled conditions:
 
-**Test 1 — Temporal Shuffling**
-All rows are randomly shuffled, destroying temporal order 
-while preserving cross-sensor (spatial) relationships. 
-If ANN performance is unchanged → temporal order was never 
-necessary → spatial depth relationships drive predictions.
+| Condition | Features | Temporal Order | RMSE | R² | Δ vs Baseline |
+|-----------|----------|----------------|------|-----|---------------|
+| Original ANN | 6 features | Preserved | 0.0038 | 0.8434 | — |
+| Shuffled ANN | 6 features | Destroyed | 0.0034 | 0.8918 | -9.2% |
+| Spatial-only ANN | 4 sensors | Preserved | 0.0045 | 0.7761 | +19.6% |
+| Spatial+Shuffled | 4 sensors | Destroyed | 0.0041 | 0.8014 | +9.1% |
 
-**Test 2 — Spatial Ablation**  
-Temporal features (hour, minute) are removed entirely. 
-Only the four moisture depth sensors remain as features.
-If performance is maintained → physics lives in sensor 
-depth relationships, not time-of-day patterns.
+### Key Findings
 
-**Hypothesis:** In high-frequency sensing (minute-level), 
-spatial relationships between sensor depths carry more 
-predictive signal than temporal dynamics — explaining 
-ANN's dominance over LSTM.
+**Finding 1 — Temporal autocorrelation causes subtle overfitting**
 
-| Condition | Features | Temporal Order | Expected Result |
-|-----------|----------|----------------|-----------------|
-| Original ANN | All 6 | Preserved | RMSE 0.0038 |
-| Shuffled ANN | All 6 | Destroyed | Similar RMSE |
-| Spatial-only ANN | 4 sensors only | Preserved | Slightly higher RMSE |
+Shuffling temporal order IMPROVED performance by 9.2%. 
+In ordered time series, consecutive readings are nearly 
+identical — the model can "cheat" by memorizing recent 
+patterns rather than learning genuine cross-sensor physics. 
+Shuffling removes this shortcut, producing a more 
+generalizable model. This is a known phenomenon in 
+high-frequency environmental sensing and has direct 
+implications for training data preparation in satellite 
+remote sensing applications.
 
+**Finding 2 — Hour of day encodes real physical information**
+
+Removing temporal features (hour, minute) caused 19.6% 
+performance degradation — confirming that hour of day 
+captures genuine physical processes: diurnal soil 
+temperature cycles, evapotranspiration patterns, and 
+irrigation scheduling. This validates SHAP's finding 
+that Hour ranked #1 in feature importance — not as a 
+spurious correlation but as a proxy for real physical 
+forcing mechanisms.
+
+**Finding 3 — Spatial depth relationships are the core physics**
+
+Even without temporal features, spatial-only ANN achieves 
+R²=0.776, confirming that cross-sensor depth relationships 
+encode the fundamental soil water physics. The 19.6% 
+degradation without temporal features represents the 
+additional contribution of diurnal physical forcing — 
+not temporal autocorrelation.
+
+**Finding 4 — LSTM's temporal memory adds no value beyond implicit time features**
+
+LSTM explicitly models sequential dependencies yet loses 
+to even the shuffled ANN. This formally confirms that 
+explicit temporal memory mechanisms are unnecessary when 
+diurnal physical forcing is already captured through 
+direct temporal features (hour). This has direct 
+implications for model selection in high-frequency 
+environmental sensing systems.
+
+### Connection to Boyd et al. (2019)
+
+These findings formally justify the architectural choice 
+of feedforward ANN over sequential models for GNSS 
+reflectometry soil moisture retrieval — CYGNSS 
+observations are simultaneous multi-channel snapshots 
+where spatial relationships between observables dominate 
+over temporal dynamics, consistent with our temporal 
+necessity test results.
+
+![Temporal Necessity Test](temporal_necessity_test.png)
 ---
 
 
