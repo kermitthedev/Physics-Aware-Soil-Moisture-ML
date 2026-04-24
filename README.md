@@ -187,7 +187,7 @@ This directly validates the physics-aware methodology of Boyd et al.
 (2019), where physical understanding guides both feature selection 
 and model interpretation.
 
-![SHAP Analysis](shap_explainability.png)
+![SHAP Analysis](figures/shap_explainability.png)
 
 ---
 
