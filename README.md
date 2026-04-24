@@ -427,6 +427,62 @@ systems.
 
 ---
 
+### Dataset Size Constraint and Synthetic Data Augmentation
+
+The 4-day dataset fundamentally limits evaluation of 
+long sequence models (SEQ_LEN > 120) due to insufficient 
+independent temporal events. Three augmentation 
+strategies are under consideration:
+
+**Level 1 — Statistical Augmentation**
+Time-warping, magnitude scaling, and synthetic irrigation 
+event generation via pattern recombination from existing 
+events. Quick to implement but limited to variations of 
+observed scenarios — does not expand the physical 
+scenario space.
+
+**Level 2 — Physics-Based Simulation (Richards Equation)**
+The Richards Equation governs water movement through 
+unsaturated soil:
+
+∂θ/∂t = ∂/∂z[K(θ)(∂ψ/∂z + 1)] - S
+
+Where θ is volumetric water content, K(θ) is hydraulic 
+conductivity, ψ is matric potential, and S is a sink 
+term. A 1D numerical solver would generate physically 
+realistic synthetic soil moisture profiles under varied:
+- Irrigation intensities and schedules
+- Initial moisture states  
+- Soil hydraulic properties (texture, porosity)
+- Evapotranspiration forcing
+
+This approach directly mirrors the physics-guided 
+methodology of Boyd et al. (2019) — using physical 
+understanding to augment observational data, extending 
+the training distribution beyond the 6-8 irrigation 
+events available in the current dataset.
+
+**Level 3 — Generative Adversarial Network (GAN)**
+A conditional GAN trained on real sensor data could 
+generate statistically and physically realistic 
+synthetic time series — the most sophisticated 
+augmentation approach, actively researched in climate 
+science and satellite remote sensing for addressing 
+sparse observational datasets analogous to CYGNSS 
+temporal sampling constraints.
+
+**Planned approach:** Level 2 physics-based simulation 
+represents the most scientifically rigorous augmentation 
+strategy aligned with the physics-aware methodology of 
+this study. Combined with the CAF field scale dataset 
+validation and chronological split fix, synthetic 
+augmentation via Richards Equation simulation would 
+provide sufficient temporal diversity for statistically 
+valid evaluation at SEQ_LEN=360 — bridging ground 
+sensor and satellite temporal scales directly relevant 
+to CYGNSS soil moisture retrieval.
+
+---
 
 ## Repository Structure
 ---
