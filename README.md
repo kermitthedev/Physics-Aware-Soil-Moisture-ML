@@ -199,7 +199,7 @@ and model interpretation.
 
 ## How to Run
 
-1. Open `soil_moisture_ann_lstm.ipynb` in Google Colab
+  1. Open `ANNsoil.ipynb` in Google Colab
 2. Upload `plant_vase1(2).csv` when prompted
 3. Run all cells sequentially
 4. Results and visualizations generate automatically
