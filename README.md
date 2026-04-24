@@ -74,10 +74,10 @@ This finding aligns with Boyd et al. (2019)'s choice of a fully connected ANN ov
 
 ## Visualizations
 
-![ANN vs LSTM Comparison](ann_vs_lstm_comparison.png)
-![Remote Sensing Style Analysis](remote_sensing_analysis.png)
-![Temporal Soil Moisture Snapshots](temporal_snapshots.png)
-![Inter-Sensor Correlation Analysis](sensor_correlation_analysis.png)
+![ANN vs LSTM Comparison](figures/ann_vs_lstm_comparison.png)
+![Remote Sensing Style Analysis](figures/remote_sensing_analysis.png)
+![Temporal Soil Moisture Snapshots](figures/temporal_snapshots.png)
+![Inter-Sensor Correlation Analysis](figures/sensor_correlation_analysis.png)
 
 *Six panel comparison showing: training loss curves, predicted vs actual scatter plots, RMSE bar chart, and time series overlay for both models.*
 
@@ -122,7 +122,7 @@ discussed in Boyd et al. (2019) for GNSS reflectometry soil moisture retrieval.
 
 ### Uncertainty Visualization
 
-![Uncertainty Quantification](uncertainity_over_time.png)
+![Uncertainty Quantification](figures/uncertainity_over_time.png)
 
 ---
 ## SHAP Explainability Analysis
@@ -261,7 +261,7 @@ where spatial relationships between observables dominate
 over temporal dynamics, consistent with our temporal 
 necessity test results.
 
-![Temporal Necessity Test](temporal_necessity_test.png)
+![Temporal Necessity Test](figures/temporal_necessity_test.png)
 ---
 
 ## Known Limitations and Future Methodology Improvements
