@@ -264,6 +264,59 @@ necessity test results.
 ![Temporal Necessity Test](temporal_necessity_test.png)
 ---
 
+## Known Limitations and Future Methodology Improvements
+
+### Temporal Data Leakage in Train/Test Split
+
+The current implementation uses a random 80/20 train/test 
+split via scikit-learn's `train_test_split`:
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y_scaled, test_size=0.2, random_state=42
+)
+```
+
+For time series data this introduces **temporal leakage** — 
+future observations can appear in the training set while 
+earlier observations appear in the test set. Since 
+consecutive soil moisture readings are highly autocorrelated 
+(minute 500 and minute 501 are nearly identical), the model 
+effectively "sees" the answer during training, producing 
+optimistically low RMSE values.
+
+The correct approach for time series evaluation is a 
+**strict chronological holdout split**:
+
+```python
+# Train on first 80% — Test on last 20% (genuinely unseen future)
+split_idx = int(len(df) * 0.8)
+X_train = X_scaled[:split_idx]  # Days 1-3
+X_test  = X_scaled[split_idx:]  # Day 4 (future holdout)
+```
+
+This ensures the model is evaluated on genuinely unseen 
+future data — the correct paradigm for any operational 
+remote sensing or environmental monitoring application 
+where predictions are always made forward in time.
+
+**Planned fix:** A full chronological split retraining is 
+planned as the next methodological update. Expected outcome: 
+RMSE values will increase, reflecting more honest 
+generalization performance. The relative ordering of models 
+(ANN outperforming LSTM) is expected to hold, as the 
+fundamental finding about spatial depth relationships 
+dominating temporal dynamics should be robust to split 
+methodology.
+
+Note: The temporal necessity test finding — that shuffling 
+training order improved performance under random split — 
+was itself a diagnostic signal of this leakage. Under 
+chronological split, shuffling is expected to hurt 
+performance as theoretically predicted, further validating 
+the importance of this methodology fix.
+
+---
 
 
 
