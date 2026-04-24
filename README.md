@@ -338,6 +338,95 @@ split correction in the next methodology update.
 
 ---
 
+### LSTM Sequence Length — Finding the Temporal Regime
+
+The current implementation uses SEQ_LEN=10 (10 minutes), 
+providing insufficient temporal context for LSTM to 
+leverage its memory mechanism. At minute-level resolution, 
+10 consecutive readings show near-zero variance — LSTM 
+has no meaningful temporal pattern to learn.
+
+A planned sequence length sweep will test:
+
+| SEQ_LEN | Temporal Window | Scientific Question |
+|---------|-----------------|---------------------|
+| 10 | 10 minutes | Current baseline |
+| 30 | 30 minutes | Short-term dynamics |
+| 60 | 1 hour | Diurnal cycle onset |
+| 120 | 2 hours | Full irrigation cycle |
+| 360 | 6 hours | CYGNSS temporal resolution |
+
+**Hypothesis:** LSTM will find its "competitive regime" 
+at SEQ_LEN ≥ 60, where sufficient temporal variation 
+exists for memory mechanisms to add predictive value 
+over static feedforward networks. The crossover point — 
+where LSTM first outperforms ANN — represents the 
+minimum temporal window required for sequential 
+modeling in high-frequency soil moisture sensing.
+
+This directly informs model selection for satellite 
+remote sensing applications where temporal resolution 
+varies from minutes (ground sensors) to hours (CYGNSS) 
+to days (SMAP).
+
+---
+
+### Downsampling and Temporal Dilation
+
+Two additional temporal modeling strategies are planned 
+for the unified methodology update:
+
+**Downsampling**
+The current dataset records at 1-minute resolution. 
+Systematic downsampling will artificially create lower 
+frequency versions of the same dataset:
+
+| Sampling Rate | Effective Resolution | Analog |
+|--------------|---------------------|--------|
+| Every 1 min | 1 minute | Current |
+| Every 10 mins | 10 minutes | IoT sensor |
+| Every 60 mins | 1 hour | Hourly station |
+| Every 360 mins | 6 hours | CYGNSS cadence |
+
+Training ANN and LSTM on each downsampled version 
+produces a **sampling frequency vs model performance** 
+curve — directly answering when temporal models become 
+necessary as data becomes coarser. The hypothesis is 
+that LSTM gains competitive advantage as sampling 
+frequency decreases and temporal autocorrelation weakens, 
+forcing the model to rely on genuine temporal memory 
+rather than interpolation between nearly identical 
+consecutive readings.
+
+**Temporal Dilation**
+Standard LSTM with SEQ_LEN=10 sees 10 consecutive 
+minutes — a narrow temporal window with minimal 
+variation. Dilated sequence construction samples 
+every k-th timestep within a larger window:
+
+- Dilation=1: minutes [t-10, t-9, ..., t-1] — 10 min window
+- Dilation=6: minutes [t-60, t-54, ..., t-6] — 60 min window  
+- Dilation=12: minutes [t-120, t-108, ..., t-12] — 120 min window
+
+This allows LSTM to capture long-range temporal 
+dependencies without quadratically increasing sequence 
+length and training time — particularly relevant for 
+satellite remote sensing applications like CYGNSS where 
+temporal sampling is irregular across the satellite 
+constellation and long-range soil moisture memory 
+(drainage, evapotranspiration cycles) spans hours 
+rather than minutes.
+
+Combined with the warm start fix and chronological 
+split, the sequence length sweep, downsampling study, 
+and dilation analysis form a comprehensive 
+**temporal modeling regime study** — formally 
+characterizing when and why temporal models outperform 
+static feedforward networks in environmental sensing 
+systems.
+
+---
+
 
 ## Repository Structure
 ---
