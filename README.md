@@ -484,6 +484,54 @@ to CYGNSS soil moisture retrieval.
 
 ---
 
+### Temporal Feature Ablation During Downsampling
+
+The SHAP analysis identified Hour of Day as the most 
+influential feature (Mean |SHAP| = 0.01985), raising 
+an important experimental design question for the 
+downsampling regime study:
+
+Should Hour be retained or removed during downsampling 
+tests?
+
+**Case for retention:** Hour encodes genuine physical 
+forcing mechanisms — diurnal soil temperature cycles, 
+evapotranspiration, irrigation scheduling. It is a 
+physical variable not merely a temporal index. Removing 
+it conflates two separate questions: sequence length 
+adequacy and explicit temporal feature necessity.
+
+**Case for removal:** At sufficiently long sequence 
+lengths and low sampling frequencies, LSTM may learn 
+to implicitly encode temporal context from the sequence 
+pattern itself — inferring time of day from the 
+characteristic moisture dynamics rather than an explicit 
+Hour feature. This is particularly relevant for 
+satellite remote sensing applications like CYGNSS 
+where observation timing is irregular and explicit 
+temporal features are unavailable.
+
+**Planned design:** Both conditions will be evaluated 
+at each downsampling rate, producing a 2×4 experimental 
+matrix:
+
+| Sampling Rate | With Hour | Without Hour | Implicit Learning? |
+|--------------|-----------|--------------|-------------------|
+| 1 min | — | — | — |
+| 10 min | — | — | — |
+| 60 min | — | — | — |
+| 360 min | — | — | — |
+
+The crossover point — where the Delta between 
+with/without Hour approaches zero — identifies the 
+minimum temporal resolution at which LSTM implicitly 
+encodes diurnal forcing from sequence dynamics alone. 
+This directly informs feature engineering decisions 
+for satellite remote sensing ML pipelines where 
+explicit temporal features are unavailable or irregular.
+
+---
+
 ## Repository Structure
 ---
 
