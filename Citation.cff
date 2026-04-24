@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+authors:
+  - family-names: Singh
+    given-names: Adi
+    orcid: ""
+title: "Physics-Aware Soil Moisture Prediction: ANN vs LSTM 
+  with Monte Carlo Uncertainty Quantification and SHAP 
+  Explainability"
+version: 1.0.0
+date-released: 2026-04-20
+url: "https://github.com/kermitthedev/Physics-Aware-Soil-Moisture-ML"
