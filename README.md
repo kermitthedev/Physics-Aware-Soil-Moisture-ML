@@ -318,6 +318,25 @@ the importance of this methodology fix.
 
 ---
 
+### LSTM Cold Start at Test Boundary
+
+The current implementation builds LSTM sequences 
+exclusively from test data, creating an artificial 
+discontinuity at the train/test boundary. The LSTM 
+has no memory of the final timesteps of training when 
+making its first test predictions.
+
+The methodologically correct approach is a **warm start** 
+— feeding the LSTM the final `SEQ_LEN` (10) timesteps 
+of training data as context before evaluating on test 
+data. This reflects real operational deployment where 
+recent history is always available, and prevents 
+artificially penalizing LSTM at the sequence boundary.
+
+This fix will be implemented alongside the chronological 
+split correction in the next methodology update.
+
+---
 
 
 ## Repository Structure
