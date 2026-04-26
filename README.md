@@ -790,6 +790,28 @@ without perfect multi-layer agreement.
 
 ![Physical Validation](figuresphysical_validation.png)
 
+**Richards Equation Limitation Finding:**
+Systematic parameter testing revealed that the 1D 
+Richards Equation with uniform van Genuchten parameters 
+cannot reproduce moisture4's observed spike dynamics 
+regardless of parameter values. The deep sensor 
+responds to preferential flow pathways — water moving 
+through macropores or structural features rather than 
+uniform matrix flow. This violates the fundamental 
+assumption of the Richards Equation which models only 
+uniform matrix flow.
+
+This finding motivated a pragmatic shift to Level 1 
+statistical augmentation for synthetic data generation, 
+while the Richards Equation solver remains documented 
+as a prototype demonstrating the physics-based 
+augmentation concept. Future work will explore dual 
+permeability models that explicitly account for 
+preferential flow alongside matrix flow — a known 
+extension of the Richards Equation for structured soils.
+
+---
+
 ## Repository Structure
 ---
 
