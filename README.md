@@ -3,6 +3,7 @@
 *Inspired by Boyd et al. (2019) — "High Spatio-Temporal Resolution CYGNSS Soil Moisture Estimates Using Artificial Neural Networks"*
 
 ---
+(Further Findings are available in Findings.md, the continuation after the end of this file - Findings.md)
 
 ## Overview
 
