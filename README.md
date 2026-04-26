@@ -94,8 +94,8 @@ Following Boyd et al. (2019), features were selected based on physical understan
 
 | Model | RMSE (cm³/cm³) | R² |
 |-------|---------------|-----|
-| **ANN** | **0.0038** | **0.8434** |
-| LSTM | 0.0056 | 0.6041 |
+| **ANN** | **0.0037** | **0.8500** |
+| LSTM | 0.0060 | 0.5426 |
 
 **Winner: ANN — outperforms LSTM by 47.2%**
 
@@ -137,8 +137,8 @@ rather than a single estimate.
 
 | Model | RMSE (cm³/cm³) | R² | Notes |
 |-------|---------------|-----|-------|
-| ANN (Standard) | 0.0038 | 0.8434 | Single point prediction |
-| LSTM | 0.0056 | 0.6041 | Sequential memory |
+| ANN (Standard) | 0.0037 | 0.8500 | Single point prediction |
+| LSTM | 0.0060 | 0.5426 | Sequential memory |
 | **ANN (MC Dropout)** | **0.0037** | **best** | **+ uncertainty estimates** |
 
 Mean uncertainty ±2σ: 0.0031 cm³/cm³
@@ -237,7 +237,7 @@ four controlled conditions:
 
 | Condition | Features | Temporal Order | RMSE | R² | Δ vs Baseline |
 |-----------|----------|----------------|------|-----|---------------|
-| Original ANN | 6 features | Preserved | 0.0038 | 0.8434 | — |
+| Original ANN | 6 features | Preserved | 0.0037 | 0.8500 | — |
 | Shuffled ANN | 6 features | Destroyed | 0.0034 | 0.8918 | -9.2% |
 | Spatial-only ANN | 4 sensors | Preserved | 0.0045 | 0.7761 | +19.6% |
 | Spatial+Shuffled | 4 sensors | Destroyed | 0.0041 | 0.8014 | +9.1% |
@@ -666,6 +666,80 @@ SEQ_LEN=360, and the full downsampling regime study —
 transforming this project from a single-site proof of 
 concept into a methodologically complete research 
 contribution suitable for peer review submission.
+
+---
+
+### Richards Equation Parameterization Strategy
+
+A critical design decision for Issue #8 (Richards Equation
+synthetic data augmentation) is how to parameterize the
+van Genuchten soil hydraulic model:
+
+∂θ/∂t = ∂/∂z[K(θ)(∂ψ/∂z + 1)] - S
+
+The van Genuchten parameters governing this equation are:
+
+| Parameter | Description | Role |
+|-----------|-------------|------|
+| θs | Saturated water content | Maximum moisture ceiling |
+| θr | Residual water content | Minimum moisture floor |
+| α | Air entry parameter | Drainage rate shape |
+| n | Pore size distribution | Curve sharpness |
+| Ks | Saturated hydraulic conductivity | Flow speed |
+
+**Naive approach (rejected):** Use generic tabulated
+values for "potting soil" from soil physics literature.
+Fast but produces synthetic data that may not match
+the specific vase's actual drainage behavior — LSTM
+trained on mismatched synthetic data learns wrong physics.
+
+**Planned approach: Data-driven parameter fitting**
+Fit van Genuchten parameters directly to the observed
+4-day sensor data using scipy.optimize — minimizing
+the residual between Richards Equation output and
+actual moisture4 readings. This treats the real data
+as a calibration dataset for the physics model rather
+than just a training set for the ML model.
+
+This approach ensures synthetic data is physically
+consistent with the actual sensor setup — same drainage
+curves, same depth propagation delays, same irrigation
+response dynamics. LSTM trained on parameter-fitted
+synthetic data learns patterns directly transferable
+to real test conditions.
+
+**Implementation plan:**
+
+Phase 1 — Parameter estimation:
+Optimize van Genuchten parameters against real data
+using scipy.optimize.minimize with L-BFGS-B method.
+Objective: minimize RMSE between Richards Equation
+simulated moisture profile and observed sensor readings.
+
+Phase 2 — Synthetic generation:
+Generate 30+ days of synthetic multi-sensor data with
+varied irrigation schedules, intensities and timing
+using fitted parameters as physical constraints.
+
+Phase 3 — Statistical validation:
+Verify synthetic data matches real data distribution —
+similar mean, std, drainage curves and depth
+propagation characteristics.
+
+Phase 4 — Augmented training:
+Retrain ANN and LSTM on real + synthetic combined
+dataset. Chronological split, sequence length sweep
+and downsampling regime study all become valid.
+
+This data-driven parameterization approach — fitting
+physics model parameters to observations before
+generating synthetic data — directly mirrors the
+methodology used in top remote sensing papers for
+augmenting sparse satellite observational datasets,
+making it directly relevant to CYGNSS soil moisture
+retrieval applications.
+
+---
 
 ## Repository Structure
 ---
