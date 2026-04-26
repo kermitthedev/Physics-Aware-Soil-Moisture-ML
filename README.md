@@ -55,11 +55,15 @@ environmental sensing applications.
 
 ## Dataset
 
-- **Source:** Multi-sensor plant vase soil moisture dataset
-- **Duration:** 4 days (March 6-9, 2020), minute-level resolution
-- **Samples:** 4,409 timestamped readings
-- **Features:** 5 moisture sensors at different depths + temporal context (hour, minute)
-- **Target:** moisture4 (deepest sensor — hardest to measure directly)
+**Original:**
+- Source: Multi-sensor plant vase soil moisture dataset
+- Duration: 4 days (March 6-9, 2020), minute-level resolution
+- Samples: 4,409 timestamped readings
+
+**Augmented (Level 1 Statistical):**
+- Synthetic samples: 43,200 (30 days)
+- Combined: 47,609 samples
+- Enables chronological evaluation and SEQ_LEN sweep
 
 | Column | Description |
 |--------|-------------|
@@ -97,7 +101,7 @@ Following Boyd et al. (2019), features were selected based on physical understan
 | **ANN** | **0.0037** | **0.8500** |
 | LSTM | 0.0060 | 0.5426 |
 
-**Winner: ANN — outperforms LSTM by 47.2%**
+**Winner: ANN — outperforms LSTM by 61.7%**
 
 ### Key Finding
 
@@ -930,11 +934,11 @@ was identified during chronological split analysis
 and represents a real characteristic of the sensor 
 hardware.
 
-Level 1 synthetic data will include stochastic 
-quantization noise in Issue #3 — applying 0.01 
-cm³/cm³ rounding to synthetic moisture4 values 
-to match real sensor resolution characteristics. 
-This prevents domain shift between smooth synthetic 
+Level 1 synthetic data includes stochastic 
+quantization noise — applying 0.01 cm³/cm³ 
+rounding to synthetic moisture4 values to match 
+real sensor resolution characteristics. This 
+prevents domain shift between smooth synthetic 
 training data and quantized real test data.
 
 ---
@@ -944,10 +948,12 @@ training data and quantized real test data.
 
 ## How to Run
 
-  1. Open `ANNsoil.ipynb` in Google Colab
+1. Open `ANNsoil.ipynb` in Google Colab
 2. Upload `plant_vase1(2).csv` when prompted
-3. Run all cells sequentially
-4. Results and visualizations generate automatically
+3. For augmented chronological evaluation also 
+   upload `synthetic_moisture_final.csv`
+4. Run all cells sequentially
+5. Results and visualizations generate automatically
 
 ---
 
