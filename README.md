@@ -708,6 +708,18 @@ response dynamics. LSTM trained on parameter-fitted
 synthetic data learns patterns directly transferable
 to real test conditions.
 
+**Boundary conditions:**
+- **Upper boundary:** Variable flux — irrigation rate 
+  during detected events, zero flux otherwise
+- **Lower boundary:** Free drainage (unit gradient) — 
+  water exits bottom layer under gravity alone
+
+This assumption is validated by the sensor data — 
+moisture4 consistently returns to baseline (~0.02 
+cm³/cm³) after irrigation events, consistent with 
+free drainage behavior rather than constant head 
+(pooling) conditions.
+
 **Implementation plan:**
 
 Phase 1 — Parameter estimation:
