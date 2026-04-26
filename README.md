@@ -753,6 +753,43 @@ retrieval applications.
 
 ---
 
+### Physical Validation Results
+
+The Richards Equation solver was validated against 
+the 4-day observational dataset using data-fitted 
+van Genuchten parameters:
+
+| Parameter | Fitted Value | Physical Meaning |
+|-----------|-------------|-----------------|
+| θr | 0.0090 | Residual moisture |
+| θs | 0.1210 | Saturated moisture |
+| α | 0.0500 | Air entry parameter |
+| n | 1.4000 | Pore distribution |
+| Ks | 0.0050 | Hydraulic conductivity |
+
+Physical validation of the Richards Equation solver 
+against observations shows reasonable agreement for 
+the deep sensor (moisture4, RMSE=0.088 cm³/cm³) but 
+poor agreement for intermediate layers — particularly 
+moisture1 which exhibits anomalously high saturation 
+values (max 0.96 cm³/cm³) inconsistent with uniform 
+soil hydraulic behavior. This suggests a non-uniform 
+soil column with distinct hydraulic properties at 
+different depths — a known limitation of the 1D 
+uniform Richards Equation assumption.
+
+**Implication for synthetic generation:**
+Perfect physical validation is not required for useful 
+synthetic data augmentation. The solver reliably 
+reproduces moisture4 drainage dynamics — the primary 
+prediction target — with physically realistic irrigation 
+response and drainage curves. Synthetic data generated 
+using fitted parameters provides sufficient temporal 
+diversity for LSTM sequence length evaluation even 
+without perfect multi-layer agreement.
+
+![Physical Validation](figures/physical_validation.png)
+
 ## Repository Structure
 ---
 
