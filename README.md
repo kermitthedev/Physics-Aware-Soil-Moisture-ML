@@ -918,6 +918,25 @@ diversity required for valid chronological evaluation.
 
 ![Statistical Augmentation](figures/statistical_augmentation.png)
 
+### Sensor Quantization in Synthetic Data (Known Limitation)
+
+Real sensor observations show discrete quantization 
+at 0.01 cm³/cm³ resolution — moisture4 reports 
+values of exactly 0.02, 0.03, 0.04, 0.05 rather 
+than continuous values. This quantization artifact 
+was identified during chronological split analysis 
+and represents a real characteristic of the sensor 
+hardware.
+
+Level 1 synthetic data will include stochastic 
+quantization noise in Issue #3 — applying 0.01 
+cm³/cm³ rounding to synthetic moisture4 values 
+to match real sensor resolution characteristics. 
+This prevents domain shift between smooth synthetic 
+training data and quantized real test data.
+
+---
+
 ## Repository Structure
 ---
 
