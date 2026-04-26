@@ -567,6 +567,106 @@ explicit temporal features are unavailable or irregular.
 
 ---
 
+### Chronological Split — Distribution Shift Finding
+
+Upon implementing the chronological 80/20 split (Issue #1 fix),
+a significant **distribution shift** was discovered between the
+training and test periods:
+
+| Statistic | Training (Days 6-9, 00:00-09:05) | Test (Day 9, 09:06-23:47) |
+|-----------|----------------------------------|--------------------------|
+| Mean | 0.0250 cm³/cm³ | 0.0306 cm³/cm³ |
+| Std | 0.0094 cm³/cm³ | 0.0044 cm³/cm³ |
+| Min | 0.0100 cm³/cm³ | 0.0200 cm³/cm³ |
+| Max | 0.1100 cm³/cm³ | 0.0500 cm³/cm³ |
+
+The test period falls entirely within a post-irrigation
+recovery window with no major irrigation events and half
+the variance of the training period. Two compounding issues
+were identified:
+
+**Issue 1 — Regime mismatch:**
+The model was trained predominantly on dynamic high-variance
+periods including large irrigation spikes (max 0.11 cm³/cm³).
+The test period is a quiescent low-variance window (max 0.05
+cm³/cm³) representing a fundamentally different moisture
+regime. This produced ANN RMSE=0.0096 and R²=-3.76 —
+negative R² indicating the model performs worse than a
+naive mean predictor on this specific test window.
+
+**Issue 2 — Sensor quantization artifact:**
+Visual inspection of the test period predictions revealed
+discrete quantized jumps in moisture4 readings (0.02, 0.03,
+0.04, 0.05 cm³/cm³) absent from the training period —
+suggesting possible sensor resolution degradation or
+measurement mode change in the final hours of Day 9.
+This data quality artifact further degraded evaluation
+metrics independent of model performance.
+
+**Scientific interpretation:**
+This finding reveals a critical challenge in environmental
+sensing ML — models trained on dynamic periods may fail
+during quiescent periods and vice versa. This is directly
+relevant to satellite remote sensing applications like
+CYGNSS where signal quality and soil moisture dynamics
+vary significantly across seasons, weather events, and
+geographic regions. A robust model must be evaluated
+across representative regime
+
+---
+
+### Chronological Split — Critical Dataset Limitation
+
+Systematic evaluation of multiple split points revealed
+a fundamental dataset constraint:
+
+| Split | Split Point | Test Max | Test Std | Viable? |
+|-------|-------------|----------|----------|---------|
+| 80/20 | Day 9, 09:06 | 0.0500 | 0.0044 | ❌ |
+| 70/30 | Day 9, 01:44 | 0.0500 | 0.0061 | ❌ |
+| 60/40 | Day 8, 18:23 | 0.0500 | 0.0062 | ❌ |
+| 50/50 | Day 8, 11:02 | 0.0500 | 0.0060 | ❌ |
+
+All 48 major irrigation spikes (moisture4 > 0.05) occur
+before Day 8, 06:08 — the first 43% of the dataset.
+Every possible chronological split produces a test set
+containing zero irrigation events, making representative
+evaluation impossible regardless of split ratio.
+
+This is not a modeling failure — it is a dataset
+structural constraint. The 4-day recording captures
+a single irrigation cycle followed by a long recovery
+period. Chronological evaluation requires multiple
+independent irrigation cycles distributed across the
+full recording duration.
+
+**This finding formally motivates Issue #8 (Richards
+Equation synthetic augmentation)** — generating
+physically realistic multi-cycle data is not optional
+for rigorous evaluation, it is a prerequisite.
+
+**Decision:** Reverting to random 80/20 split for
+current results with explicit acknowledgment that
+reported metrics reflect interpolation performance
+(random split) rather than true forecasting performance
+(chronological split). Chronological evaluation will
+be revisited after synthetic augmentation provides
+sufficient temporal diversity. This dataset structural constraint represents the 
+strongest empirical argument for Richards Equation 
+synthetic data augmentation (Issue #8) in this entire 
+study. The inability to construct a representative 
+chronological split is not merely a methodological 
+inconvenience — it is direct evidence that 4 days of 
+single-cycle sensor data is fundamentally insufficient 
+for rigorous temporal generalization evaluation. 
+Generating 30+ days of synthetic multi-cycle data via 
+the Richards Equation solver would immediately unlock 
+chronological evaluation, sequence length sweeps up to 
+SEQ_LEN=360, and the full downsampling regime study — 
+transforming this project from a single-site proof of 
+concept into a methodologically complete research 
+contribution suitable for peer review submission.
+
 ## Repository Structure
 ---
 
