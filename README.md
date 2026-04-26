@@ -812,6 +812,71 @@ extension of the Richards Equation for structured soils.
 
 ---
 
+## Richards Equation Solver — Physical Interpretation
+
+As part of Issue #8 (physics-based synthetic data 
+augmentation), a 1D Richards Equation finite difference 
+solver was implemented and tested against the real 
+sensor observations.
+
+### Unexpected Finding: Preferential Flow Signature
+
+Systematic testing across multiple van Genuchten 
+parameter configurations revealed that uniform matrix 
+flow modeled by the Richards Equation cannot reproduce 
+moisture4's observed dynamics regardless of parameter 
+values — the simulator either stays near saturation 
+or produces a flat line, never matching the real 
+sensor's characteristic dry baseline with sharp 
+isolated spikes.
+
+This is consistent with **preferential flow** — water 
+moving through macropores or structural pathways rather 
+than uniform soil matrix. Key evidence:
+
+- moisture4 spikes occur within minutes of surface 
+  irrigation — too fast for uniform matrix flow 
+  through 5 depth layers
+- Rapid return to dry baseline inconsistent with 
+  capillary retention in matrix flow
+- moisture1 simultaneously saturates to 0.96 cm³/cm³ 
+  while moisture4 barely exceeds 0.11 cm³/cm³ — 
+  inconsistent with uniform wetting front propagation
+
+### Connection to ML Results
+
+This physical finding provides a novel explanation 
+for ANN's dominance over LSTM throughout this study. 
+Preferential flow produces discrete, rapid, 
+event-driven moisture dynamics — not the gradual 
+temporal accumulation that LSTM's memory mechanism 
+is designed to capture. Feedforward networks 
+that treat each timestep independently are better 
+suited to event-driven systems than sequential 
+models that expect smooth temporal continuity.
+
+This physical interpretation — derived from the 
+Richards Equation solver — unifies all four major 
+findings of this study:
+
+| Finding | Physical Explanation |
+|---------|---------------------|
+| ANN beats LSTM by 61.7% | Preferential flow = event-driven, not temporally continuous |
+| Shuffling improved performance | No temporal autocorrelation in event-driven spikes |
+| Hour ranked #1 in SHAP | Irrigation scheduling determines event timing |
+| Spatial features dominate | Flow pathway connectivity > temporal memory |
+
+### Future Work
+Dual permeability models — explicitly modeling both 
+matrix flow (Richards Equation) and preferential 
+flow (kinematic wave) simultaneously — represent 
+the natural extension of this solver for structured 
+soil systems.
+
+![Finding](finding.png)
+
+---
+
 ## Repository Structure
 ---
 
