@@ -917,6 +917,8 @@ diversity required for valid chronological evaluation.
   and statistically valid LSTM evaluation
 
 ![Statistical Augmentation](figures/statistical_augmentation.png)
+![Noice Reduced](figures/Noise_reduced.png)
+![Noise Caliberated Augmentation](figures/Noise_calib.png)
 
 ### Sensor Quantization in Synthetic Data (Known Limitation)
 
