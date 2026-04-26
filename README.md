@@ -788,7 +788,7 @@ using fitted parameters provides sufficient temporal
 diversity for LSTM sequence length evaluation even 
 without perfect multi-layer agreement.
 
-![Physical Validation](figures/physical_validation.png)
+![Physical Validation](figuresphysical_validation.png)
 
 ## Repository Structure
 ---
