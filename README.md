@@ -3,7 +3,14 @@
 *Inspired by Boyd et al. (2019) — "High Spatio-Temporal Resolution CYGNSS Soil Moisture Estimates Using Artificial Neural Networks"*
 
 ---
-(Further Findings are available in Findings.md, the continuation after the end of this file - Findings.md)
+(> **Note:** These results reflect the complete methodological 
+> evolution of this study. See [FINDINGS.md](FINDINGS.md) for 
+> the full scientific story — from initial random split results 
+> to corrected chronological evaluation findings.
+> 
+> **Phase 1 (Random Split):** ANN wins by 61.7%  
+> **Phase 4 (Chronological Split):** LSTM wins by 18.9%  
+> The evaluation methodology is itself a key finding.
 
 ## Overview
 
