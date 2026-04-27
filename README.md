@@ -5,7 +5,7 @@
 ---
 (> **Note:**
 > These results reflect the complete methodological 
-> evolution of this study. See [FINDINGS.md](FINDINGS.md) for 
+> evolution of this study. See [Findings.md](Findings.md) for 
 > the full scientific story — from initial random split results 
 > to corrected chronological evaluation findings.
 > 
