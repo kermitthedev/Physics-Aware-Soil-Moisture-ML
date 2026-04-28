@@ -2,13 +2,40 @@
 
 ## Overview
 
-This document chronicles the methodological evolution 
-of this study and the progressive discovery of findings 
-that fundamentally changed the research conclusions.
-The progression itself represents a key scientific 
-contribution — demonstrating how evaluation methodology 
-determines apparent architecture superiority in 
-soil moisture deep learning.
+## Overview — The Central Finding
+
+This study began as a model comparison (ANN vs LSTM) 
+and became a methodological investigation.
+
+The central finding is not which model wins.
+
+The central finding is:
+
+> **Evaluation methodology fundamentally alters the 
+> apparent magnitude and persistence of temporal 
+> learning in soil moisture prediction.**
+
+Under random splits — the dominant strategy in 
+environmental ML literature — LSTM advantage is 
+large (+15-17%), persistent across all sequence 
+lengths, and physically suspicious.
+
+Under chronological evaluation — the correct paradigm 
+for operational forecasting — LSTM advantage is 
+bounded (+6%), localized to a specific temporal 
+window (60 minutes), and physically meaningful.
+
+The 3× inflation of apparent LSTM advantage under 
+random splits demonstrates that non-causal temporal 
+sampling does not merely inflate performance metrics 
+— it fundamentally changes the scientific conclusion 
+about when and why temporal memory helps.
+
+This has direct implications for the remote sensing 
+ML community, where random splits are routinely used 
+to evaluate sequence models on inherently temporal 
+satellite observation data including NASA CYGNSS 
+soil moisture retrieval.
 
 ---
 
