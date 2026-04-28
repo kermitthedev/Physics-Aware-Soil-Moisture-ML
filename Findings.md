@@ -338,7 +338,7 @@ history dominates).
 - Chronological: +0.3% LSTM advantage (near zero)
 - Random: +16.0% LSTM advantage (appears substantial)
 
-  ![Sweep Analysis](figures/seq_sweep_random_vs_chronological.png.png)
+  ![Sweep Analysis](figures/seq_sweep_random_vs_chronological.png)
 
 A researcher using random split would conclude LSTM 
 needs long sequences to perform well. A researcher 
