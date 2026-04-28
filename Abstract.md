@@ -1,3 +1,29 @@
+# Abstract — Draft v1.0
+
+**Paper Title:**
+Non-Causal Temporal Sampling Inflates Sequence Model 
+Advantage by 3× in Soil Moisture Prediction: 
+A Methodological Analysis
+
+**Target Venue:** 
+IEEE Geoscience and Remote Sensing Letters (IEEE GRSL)
+or IGARSS 2027
+
+**Authors:**
+Adi Singh — MS Cybersecurity, Mississippi State University
+
+**Status:** Draft — pending experimental completion
+- ✅ Phase 1-5 complete
+- ⬜ Issue #5 Downsampling regime study
+- ⬜ Issue #6 Temporal feature ablation  
+- ⬜ Issue #7 CAF field scale validation
+- ⬜ Issue #9 Statistical significance testing
+
+**Last Updated:** April 2026
+
+---
+---
+
 ## Abstract (Draft)
 
 Deep learning model selection for environmental time 
