@@ -282,6 +282,42 @@ moisture3 (Layer 4, adjacent to target) ranks #1
 in temporal SHAP — physically correct, consistent 
 with chronological split findings.
 
+---
+
+## Open Questions — Future Investigation
+
+The following questions emerged from the study and 
+remain unresolved:
+
+**Q1: Does the inverted-U pattern hold under random split?**
+Issue #4b will reveal whether temporal leakage masks 
+the optimal window signal — or whether the pattern 
+appears under both evaluation regimes.
+
+**Q2: At what sampling frequency does LSTM become 
+necessary?**
+Issue #5 (downsampling regime study) will test ANN 
+vs LSTM at 1min, 10min, 60min, 360min resolution — 
+directly relevant to CYGNSS's ~7 hour revisit cadence.
+
+**Q3: Can LSTM implicitly learn time-of-day patterns 
+without explicit Hour feature?**
+Issue #6 (temporal feature ablation) will test whether 
+LSTM learns diurnal forcing from sequence patterns alone 
+at lower sampling frequencies.
+
+**Q4: Do findings generalize beyond a single sensor site?**
+Issue #7 (CAF field scale validation) will test on 
+Washington State University's 9-year, 42-location 
+agricultural sensor network.
+
+**Q5: Are the ANN vs LSTM differences statistically 
+significant?**
+Issue #9 (Diebold-Mariano test) will provide formal 
+statistical significance testing across all comparisons.
+
+---
+
 ### Proposed Paper Title
 
 *"Evaluation Methodology Determines Architecture 
@@ -316,6 +352,12 @@ Under Chronological Forecasting"*
 
 7. **Evaluation methodology is the key variable** 
    — not architecture, not hyperparameters
+
+8. **Optimal temporal window is 60 minutes** — LSTM 
+   advantage follows inverted-U curve peaking at 
+   SEQ_LEN=60, corresponding to complete irrigation 
+   event cycle duration. Beyond 60 minutes irrelevant 
+   history dominates and advantage collapses.
 
 ---
 
