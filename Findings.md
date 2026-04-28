@@ -233,6 +233,53 @@ even if individual spikes are discrete.
 This reconciles the preferential flow finding with 
 LSTM's superior forecasting performance.
 
+---
+
+## Phase 5 — Sequence Length Sweep (Issue #4)
+*Finding the optimal temporal window for LSTM*
+
+### Setup
+- SEQ_LEN sweep: 10, 30, 60, 120 minutes
+- Dataset: Combined augmented (47,609 samples)
+- Chronological split maintained
+- LSTM warm start applied at each SEQ_LEN
+
+### Results
+
+| SEQ_LEN | ANN RMSE | LSTM RMSE | LSTM Advantage |
+|---------|----------|-----------|----------------|
+| 10 min | 0.0043 | 0.0043 | +0.5% (tie) |
+| 30 min | 0.0041 | 0.0039 | +5.2% |
+| **60 min** | **0.0041** | **0.0039** | **+6.1% ← PEAK** |
+| 120 min | 0.0040 | 0.0040 | +0.3% (tie) |
+
+### Key Finding: Inverted U Relationship
+
+LSTM advantage follows an inverted U curve peaking 
+at SEQ_LEN=60 — the 1-hour window corresponding to 
+a complete irrigation event cycle duration.
+
+**Physical interpretation:**
+- SEQ_LEN < 30 — too short to capture irrigation onset
+- SEQ_LEN = 60 — captures complete event cycle ← optimal
+- SEQ_LEN > 60 — irrelevant history dominates, 
+  advantage collapses
+
+### Implication for Remote Sensing
+
+The optimal temporal window (60 minutes) corresponds 
+to the physical duration of irrigation events in this 
+system. For CYGNSS with ~7 hour revisit time — 
+well beyond the optimal window — sequence length 
+selection should be guided by the dominant physical 
+process duration rather than data availability.
+
+### SHAP at Optimal SEQ_LEN=60
+
+moisture3 (Layer 4, adjacent to target) ranks #1 
+in temporal SHAP — physically correct, consistent 
+with chronological split findings.
+
 ### Proposed Paper Title
 
 *"Evaluation Methodology Determines Architecture 
