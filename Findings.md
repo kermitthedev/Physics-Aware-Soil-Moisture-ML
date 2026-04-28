@@ -274,6 +274,8 @@ well beyond the optimal window — sequence length
 selection should be guided by the dominant physical 
 process duration rather than data availability.
 
+![Sequence Length Sweep](figures/sequence_length_sweep.png)
+
 ### SHAP at Optimal SEQ_LEN=60
 
 moisture3 (Layer 4, adjacent to target) ranks #1 
