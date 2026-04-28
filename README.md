@@ -15,9 +15,34 @@
 
 ## Overview
 
-This project implements and compares two deep learning architectures — a fully connected Artificial Neural Network (ANN) and a Long Short-Term Memory network (LSTM) — for soil moisture prediction from multi-sensor time series data.
+This project began as a comparison of ANN and LSTM 
+architectures for soil moisture prediction — and 
+became a methodological investigation into how 
+evaluation design determines scientific conclusions.
 
-The methodology is directly inspired by Boyd et al. (2019), which demonstrated that physics-aware machine learning can effectively retrieve soil moisture from NASA's CYGNSS satellite GPS reflectometry signals. This project replicates the core ML pipeline concept using ground-based sensor data: using shallow/surface sensor readings as observable inputs to predict deeper, harder-to-measure moisture values — mirroring the satellite approach of using GPS surface reflections to estimate subsurface soil moisture.
+**Central finding:**
+Non-causal temporal sampling (random train/test split) 
+inflates apparent LSTM advantage by 3× compared to 
+chronological evaluation — the correct paradigm for 
+operational forecasting. Under random splits LSTM 
+appears to win by 15-17%. Under chronological 
+evaluation the true advantage is 6% at an optimal 
+60-minute temporal window, collapsing to near zero 
+at longer windows.
+
+> "Under random splits, LSTM performance improvements 
+> increase from ~6% to ~17%, suggesting that commonly 
+> used evaluation strategies substantially overestimate 
+> the benefits of temporal modeling."
+
+This finding has direct implications for remote sensing 
+ML evaluation protocols — particularly NASA CYGNSS 
+soil moisture retrieval where operational deployment 
+requires genuine forecasting, not interpolation.
+
+See [FINDINGS.md](Findings.md) for the complete 
+scientific evolution from initial results to 
+corrected methodology and final conclusions.
 
 ---
 
